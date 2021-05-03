@@ -1,0 +1,66 @@
+#include <mega128.h>
+#include <delay.h>
+#define SPEED 2
+
+int comm[8] = {1,2,4,8,0x10,0x20,0x40,0x80};
+int dot[4][8] = {{0x08, 0x18, 0x28, 0x08, 0x08, 0x08, 0x08, 0x3c},
+                       {0x3c, 0x42, 0x02, 0x04, 0x08, 0x10, 0x20, 0x7e},
+                       {0x1c, 0x22, 0x02, 0x04, 0x02, 0x22, 0x22, 0x1c},
+                       {0x02, 0x22, 0x22, 0x22, 0x3e, 0x02, 0x02, 0x02}};
+
+void main(void)
+{
+        int i, key;
+        
+        DDRB = 0xff;
+        DDRC = 0xff;
+        DDRE = 0;
+        
+        while(1)
+        {
+             key = PINE & 0xf0;          // 포트 E 읽어 오기
+             switch(key)
+             {
+                 case 0b11100000:        // SW8이 눌리면 "1" 출력
+                 {
+                          for(i=0; i<8;i++)
+                          {
+                              PORTB = comm[i];
+                              PORTC = dot[0][i];       //가로 첫 째줄, 세로 [i]번째
+                              delay_ms(SPEED);
+                              PORTC = 0x00;
+                          }break;
+                 }
+                  case 0b11010000:        // SW14이 눌리면 "2" 출력
+                 {
+                          for(i=0; i<8;i++)
+                          {
+                              PORTB = comm[i];
+                              PORTC = dot[1][i];       //가로 첫 째줄, 세로 [i]번째
+                              delay_ms(SPEED);
+                              PORTC = 0x00;
+                          }break;
+                 }
+                  case 0b101100000:        // SW15이 눌리면 "3" 출력
+                 {
+                          for(i=0; i<8;i++)
+                          {
+                              PORTB = comm[i];
+                              PORTC = dot[2][i];       //가로 첫 째줄, 세로 [i]번째
+                              delay_ms(SPEED);
+                              PORTC = 0x00;
+                          }break;
+                 }
+                  case 0b01110000:        // SW16이 눌리면 "4" 출력
+                 {
+                          for(i=0; i<8;i++)
+                          {
+                              PORTB = comm[i];
+                              PORTC = dot[3][i];       //가로 첫 째줄, 세로 [i]번째
+                              delay_ms(SPEED);
+                              PORTC = 0x00;
+                          }break;
+                 }
+             }
+        }
+}
