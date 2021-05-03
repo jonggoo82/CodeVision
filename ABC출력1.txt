@@ -1,0 +1,35 @@
+#include <mega128.h>
+#include <delay.h>
+
+int dot[3][8] = {{0x18,0x24,0x42,0x42,0x7e,0x42,0x42,0x42}, //A
+                          {0x7c,0x42,0x42,0x7c,0x42,0x42,0x42,0x7c},//B
+                          {0x3c,0x42,0x40,0x40,0x40,0x40,0x42,0x3c}};//C
+int comm[8] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
+
+int cnt;
+
+void main(void)
+{      
+        int i,j;
+         
+        DDRB = 0xff;
+        DDRC = 0xff;
+        
+        while(1)
+        {
+             for(i=0;i<3;i++)
+             {
+               cnt = 0;
+               do{
+                    for(j=0;j<8;j++)
+                    {
+                           PORTC = dot[i][j];
+                           PORTB = comm[j];
+                           delay_ms(1);
+                           cnt++;
+                    }
+               }while(cnt !=1000);
+             }           
+        }
+        
+}
