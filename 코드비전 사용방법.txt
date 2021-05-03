@@ -1,0 +1,13 @@
+CodeVisionAvr
+
+1. Create new file -> source 선택
+2. 코드 작성
+3. 저장 ex) a01
+4. Create new file - > project 선택
+5. 메세지창 no enter
+6. 프로젝터 파일 저장 a01
+7. add 클릭 -> 저장한 소스파일 추가
+8. C Compiler chip - >ATmega128 선택 , Clock 16MHz 설정
+9. After Make에서 Program the Chip 체크하고 OK
+10 .프로그램 수정 후 Compile the project
+11. Make the project 
