@@ -1,0 +1,51 @@
+#include <mega128.h>
+#include <delay.h>
+unsigned char keybuf = 0, newkey = 0;
+char seg_dis[10]={0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f};
+unsigned char n1=0, n10=0;
+
+void scankey(void);
+void main(void)
+{
+        DDRB = 0xff;
+        DDRF = 0xff;
+        DDRC = 0x07;
+        
+        while(1)
+        {
+             scankey();
+             newkey = keybuf;
+             n10 = newkey / 10;
+             n1 = newkey % 10;
+             PORTF = 0b11100000;
+             PORTB = seg_dis[n1];
+             delay_ms(5);
+             PORTF = 0b11010000;
+             PORTB = seg_dis[n10];
+             delay_ms(5);
+             
+        }
+}
+
+void scankey(void)
+{
+        unsigned char tmp, row, cul;
+        for(row=0; row <5; row++)
+        {
+             do{
+               PORTC= 0xf8 | row;
+               tmp = PINC & 0xf8;
+             }
+        while(tmp != (PINC & 0xf8));
+        if(tmp != 0xf8)
+        {
+             if(tmp == 0b11110000) cul = 1;
+             else if(tmp == 0b11101000) cul = 2;
+             else if(tmp == 0b11011000) cul = 3;
+             else if(tmp == 0b10111000) cul = 4;
+             else if(tmp == 0b01111000) cul = 5;
+             else cul =0;
+             keybuf = (row*5)+cul;
+        }
+    }
+}
